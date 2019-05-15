@@ -9,7 +9,6 @@ def load_images(path):
 		filenames = glob(path)
 		#filenames.sort()
 		images= [cv2.imread(img) for img in filenames]
-#		images = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) for img in image]
 		return images
 	except Exception:
 		print(f"Couldn't Load the images with path {path}")
@@ -23,11 +22,10 @@ def featureExtraction(img):
 	sift = cv2.xfeatures2d.SIFT_create()
 	i=0
 	for im in img:
-		if i > 4:
+		if i > 2:
 			break
 		i+=1
-		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-		kp,d = sift.detectAndCompute(gray,None)
+		kp,d = sift.detectAndCompute(im,None)
 		ds.append(d)
 		kps.append(kp)
 
@@ -42,18 +40,19 @@ def knn(k, descriptors, n_des):
 	for a in descriptors:
 		pass
 
-
+def kp_matching(kp1,kp2):
+	if kp1 == kp2:
+		return True
+	return False
 
 def main():
 	forest_images_path = '/home/umar/dip_project/New_Try/Database/forest/*.jpg'
 	images = load_images(forest_images_path)
-	print(len(images))
 
 	print("SIFT Working........")
 	kps, ds = featureExtraction(images)
-	showImg(images[0])	
-	showImg_kp(images[0],kps[0])
-	print(len(kps))
+	print(kp_matching(kps[0],kps[1]))
+
 
 if __name__ == '__main__':
 	main()
