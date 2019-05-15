@@ -2,12 +2,14 @@ import cv2
 from math import sqrt
 from glob import glob
 from timeit import default_timer as timer
+from helper import *
 
 def load_images(path):
 	try:
 		filenames = glob(path)
 		#filenames.sort()
-		images = [cv2.imread(img) for img in filenames]
+		images= [cv2.imread(img) for img in filenames]
+#		images = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) for img in image]
 		return images
 	except Exception:
 		print(f"Couldn't Load the images with path {path}")
@@ -21,6 +23,9 @@ def featureExtraction(img):
 	sift = cv2.xfeatures2d.SIFT_create()
 	i=0
 	for im in img:
+		if i > 4:
+			break
+		i+=1
 		gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 		kp,d = sift.detectAndCompute(gray,None)
 		ds.append(d)
@@ -46,6 +51,8 @@ def main():
 
 	print("SIFT Working........")
 	kps, ds = featureExtraction(images)
+	showImg(images[0])	
+	showImg_kp(images[0],kps[0])
 	print(len(kps))
 
 if __name__ == '__main__':
