@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from math import sqrt
+from math import sqrt, floor
 from glob import glob
 from timeit import default_timer as timer
 from helper import *
@@ -20,11 +20,7 @@ def featureExtraction(img):
 	kps = []
 	ds =[]
 	sift = cv2.xfeatures2d.SIFT_create()
-	i=0
 	for im in img:
-		if i > 3:
-			break
-		i+=1
 		kp,d = sift.detectAndCompute(im,None)
 		ds.append(d)
 		kps.append(kp)
@@ -35,19 +31,24 @@ def euclidean_Distance(x, x1):
 	return res
 
 def knn(k, descriptors, n_des):
-	match = {}
-	print(len(descriptors[0]))
-	print(len(n_des))
-	for a in descriptors:
-		print(a)
-		print(n_des)
+	matches = {}
+	for index,a in enumerate(descriptors):
 		d_train, d_test = reshape_1D(a, n_des)
-		print(d_train)
-		print(d_test)
-		print(sqrt(sum((d_train-d_test) **2)))
-		break
-		#res = sum((d_train-d_test)**2)
-		#res = sqrt(sum(sum(((d_train-d_test)**2))))
+		res=floor(sqrt(sum((d_train-d_test) **2)))
+		temp_d = {index:res}
+		print(f'index: {index}, Result: {res}')
+		if len(matches) < k:
+			matches.update(temp_d)
+		else:
+			for key,v in matches.items():
+				if v > res:
+					matches.pop(key,'Not Found')
+					print('Updated')
+					matches.update(temp_d)
+					break
+		del temp_d
+	print(matches)
+	return matches
 # Got result --check
 
 def reshape_1D(ds1, ds2):
@@ -88,7 +89,22 @@ def main():
 #	Classification
 
 	#t,te = reshape_1D(ds[0],ds_t[0]) # --> Reshaped correctly
-	knn(3, ds, ds_t[0])
+	matches = knn(3, ds, ds_t[1])
+	print("Matches Images")
+	index = matches.keys()
+
+	pridicted_index = []
+
+	for a in index:
+		pridicted_index.append(a)
+
+	print(pridicted_index[0])
+	print("Original Image")
+	showImg(images_test[1],1)
+	print("Pridicted Image")
+	showImg(images[pridicted_index[0]],1)
+	showImg(images[pridicted_index[1]],1)
+	showImg(images[pridicted_index[2]],1)
 
 if __name__ == '__main__':
 	main()
