@@ -26,10 +26,6 @@ def featureExtraction(img):
 		kps.append(kp)
 	return kps,ds
 
-def euclidean_Distance(x, x1):
-	res = sqrt((x-x1) **2)
-	return res
-
 def knn(k, descriptors, n_des):
 	matches = {}
 	for index,a in enumerate(descriptors):
@@ -49,7 +45,6 @@ def knn(k, descriptors, n_des):
 		del temp_d
 	print(matches)
 	return matches
-# Got result --check
 
 def reshape_1D(ds1, ds2):
 	# Reshape array function
@@ -68,11 +63,6 @@ def reshape_1D(ds1, ds2):
 		ds1= np.append(ds1, zeros)
 	
 	return ds1, ds2
-
-def kp_matching(kp1,kp2):
-	if kp1 == kp2:
-		return True
-	return False
 
 def main():
 	forest_images_path = '/home/umar/dip_project/New_Try/Database/forest/*.jpg'
