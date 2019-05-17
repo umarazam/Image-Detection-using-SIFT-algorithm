@@ -85,13 +85,12 @@ def main():
 		ds = pickle_load(path_ds_train)
 		kps_t = keypoint_load(path_kp_test)
 		ds_t = pickle_load(path_ds_test)
-		print('Load data successfully')
+		print('Data loaded successfully...!')
 	except Exception:
 		print('Generating keypoints and descriptors')
 		print("SIFT Working for training........")
 		ts = timer()
 		kps, ds = featureExtraction(images)
-		print('Length of keypoints')
 		print("SIFT Working for testing.........")
 		kps_t, ds_t = featureExtraction(images_test)
 		tf = timer()
@@ -110,14 +109,10 @@ def main():
 	for a in index:
 		images_window.append(images[a])
 
-	print("Original Image")
-	#showImg(images_test[1],1)
-	disImage(images_window)
-	#disp_img = np.hstack((images_test[1], images[pridicted_index[0]],images[pridicted_index[1]],images[pridicted_index[1]]))
-	print("Pridicted Image")
-	#cv2.imshow('Images', disp_img)
-	#cv2.waitKey()
-	#showImg(images[pridicted_index[2]],1)
+	# 1st--> Test image other's pridected images
 
+	disImage(images_window)
+	print("Pridicted Image")
+	#showImg(images_test[1],1)
 if __name__ == '__main__':
 	main()
