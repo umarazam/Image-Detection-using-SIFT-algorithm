@@ -17,7 +17,8 @@ def featureExtraction(img):
 	import numpy as np
 	kps = []
 	ds =[]
-	sift = cv2.xfeatures2d.SIFT_create()
+#	sift = cv2.xfeatures2d.SIFT_create()
+	sift = cv2.xfeatures2d.SIFT_create(0,3,0.04,10,1.8)
 	for im in img:
 		kp,d = sift.detectAndCompute(im,None)
 		ds.append(d)
@@ -101,11 +102,11 @@ def main():
 		print(f'Total time taking {tf-ts}')
 	
 #	Classification 
-	matches = knn(3, ds, ds_t[1])
+	matches = knn(3, ds, ds_t[0])
 	print("Matches Images")
 	index = matches.keys()
 	images_window = []
-	images_window.append(images_test[1])
+	images_window.append(images_test[0])
 	for a in index:
 		images_window.append(images[a])
 
@@ -113,6 +114,6 @@ def main():
 
 	disImage(images_window)
 	print("Pridicted Image")
-	#showImg(images_test[1],1)
+	#showImg(images_test[0],1)
 if __name__ == '__main__':
 	main()
