@@ -8,9 +8,10 @@ from helper import *
 
 # --> Names for pickle objects
 path_kp_train = "kp_train.pickle"
-path_kp_test = "kp_test.pickle"
+#path_kp_test = "kp_test.pickle"
+
 path_ds_train = "ds_train.pickle"
-path_ds_test = "ds_test.pickle"
+#path_ds_test = "ds_test.pickle"
 
 # SIFT Implementation
 def featureExtraction(img):
@@ -41,7 +42,7 @@ def knn(k, descriptors, n_des):
 					#print('Updated')
 					matches.update(temp_d)
 					break
-		del temp_d
+		del temp_d 
 	print(matches)
 	return matches
 
@@ -76,33 +77,38 @@ def bf_matcher(des, n_des,k): # --> Useless
 	return matches
 
 def main():
-	forest_images_path = '/home/umar/dip_project/new_try/Database/train/*.jpg'
-	test_images_path = '/home/umar/dip_project/new_try/Database/test/*.jpg'
+	forest_images_path = '/home/umar/dip_project/new_try/Database/Dataset1/Raw_Data/tallbuilding/*.jpg'
+	test_images_path = '/home/umar/dip_project/new_try/Database/Dataset1/test/*.jpg'
 	images = load_images(forest_images_path)
 	images_test = load_images(test_images_path)
 
 	try:
 		kps = keypoint_load(path_kp_train)
 		ds = pickle_load(path_ds_train)
-		kps_t = keypoint_load(path_kp_test)
-		ds_t = pickle_load(path_ds_test)
+	#	kps_t = keypoint_load(path_kp_test)
+	#	ds_t = pickle_load(path_ds_test)
 		print('Data loaded successfully...!')
 	except Exception:
 		print('Generating keypoints and descriptors')
-		print("SIFT Working for training........")
+		print("SIFT Working for training data.")
 		ts = timer()
 		kps, ds = featureExtraction(images)
-		print("SIFT Working for testing.........")
-		kps_t, ds_t = featureExtraction(images_test)
 		tf = timer()
 		(keypoint_save(kps,path_kp_train))
 		(pickle_save(ds,path_ds_train))
-		(keypoint_save(kps_t,path_kp_test))
-		(pickle_save(ds_t,path_ds_test))
-		print(f'Total time taking {tf-ts}')
-	
+	#	(keypoint_save(kps_t,path_kp_test))
+	#	(pickle_save(ds_t,path_ds_test))
+		print(f'Total time took for generating keypoints and descriptors {tf-ts}')
+
+	print("SIFT Working for testing data.")
+	kps_t, ds_t = featureExtraction(images_test)
+	print("Done")
+	print("Starting classification")
 #	Classification 
+	ts = timer()
 	matches = knn(3, ds, ds_t[0])
+	tf = timer()
+	print(f'Time took to classify images {tf-ts}')
 	print("Matches Images")
 	index = matches.keys()
 	images_window = []
