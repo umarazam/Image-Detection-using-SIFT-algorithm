@@ -6,6 +6,7 @@ from math import sqrt, floor
 from timeit import default_timer as timer
 from helper import *
 
+# Checking commit section
 # --> Names for pickle objects
 path_kp_train = "kp_train.pickle"
 #path_kp_test = "kp_test.pickle"
