@@ -6,11 +6,7 @@ from glob import glob
 
 def disImage(images):
 	import numpy as np
-	temp = []
-	for img in images:
-		im = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-		temp.append(im)
-	stack = np.hstack((temp))
+	stack = np.hstack((images))
 	cv2.imshow('Images',stack)
 	cv2.waitKey()
 
@@ -18,20 +14,17 @@ def load_images(path):
 	try:
 		filenames = glob(path)
 		filenames.sort()
-		images= [cv2.imread(img) for img in filenames]
+		images= [cv2.imread(img,0) for img in filenames] # --> 0 will convert image to gray scale at the start
 		return images
 	except Exception:
 		print(f"Couldn't Load the images with path {path}")
 
-
 def showImg(img):
-	img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 	cv2.imshow('Image', img)
 	cv2.waitKey(0)
 
 def showImg_kp(im, kp):
-	gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-	out_img = cv2.drawKeypoints(gray, kp, None)
+	out_img = cv2.drawKeypoints(im, kp, None)
 	cv2.imshow('Image',out_img)
 	cv2.waitKey(0)
 
@@ -42,7 +35,7 @@ def keypoint_load(path):
 	for d in data:
 		temp_kp = []
 		for p in d:
-			temp = (cv2.KeyPoint(x=p[0][0],y=p[0][0],_size=p[1],_angle=p[2],_response=p[3],_octave=p[4],_class_id = p[5]))
+			temp = (cv2.KeyPoint(x=p[0][0],y=p[0][1],_size=p[1],_angle=p[2],_response=p[3],_octave=p[4],_class_id = p[5]))
 			temp_kp.append(temp)
 		kp.append(temp_kp)
 	return kp
